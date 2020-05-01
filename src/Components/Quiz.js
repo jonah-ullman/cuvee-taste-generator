@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { db } from '..';
+import { Container, Grid, Card, CardMedia, Button } from '@material-ui/core';
+import firebase from 'firebase';
 
 class Quiz extends Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class Quiz extends Component {
         oak: 0,
         flavor: 0,
       },
+      image: '',
     };
     this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,7 +43,7 @@ class Quiz extends Component {
   }
 
   handleSubmit(event) {
-    console.log(event.target.value);
+    console.log(event.currentTarget.category);
     const newResults = { ...this.state.results };
     newResults[this.state.currentQuestion.category] = event.target.value;
     this.setState({ results: newResults });
@@ -49,22 +52,71 @@ class Quiz extends Component {
 
   render() {
     return (
-      <div>
-        <div
-          value="pos"
-          category={this.state.currentQuestion.category}
-          onClick={this.handleSubmit}
-        >
-          {this.state.currentQuestion.pos}
-        </div>
-        <div
-          value="neg"
-          category={this.state.currentQuestion.category}
-          onClick={this.handleSubmit}
-        >
-          {this.state.currentQuestion.neg}
-        </div>
-      </div>
+      <Grid container direction="row" justify="center" spacing={3}>
+        <Grid item>
+          <Card>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <div className="image-container">
+                <img
+                  className="question-image"
+                  alt="food"
+                  src={process.env.PUBLIC_URL + '/raspberry.jpg'}
+                />
+              </div>
+              <Button
+                variant="contained"
+                color="secondary"
+                fullWidth={true}
+                value="pos"
+                category={this.state.currentQuestion.category}
+                onClick={this.handleSubmit}
+              >
+                {this.state.currentQuestion.pos}
+              </Button>
+            </Grid>
+          </Card>
+        </Grid>
+        <Grid item>
+          <Card>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <div className="image-container">
+                <img
+                  className="question-image"
+                  alt="food"
+                  src={process.env.PUBLIC_URL + '/raspberry.jpg'}
+                />
+              </div>
+              <Button variant="contained" color="primary" fullWidth={true}>
+                {this.state.currentQuestion.neg}
+              </Button>
+            </Grid>
+          </Card>
+        </Grid>
+      </Grid>
+      // {/* <div
+      //   value="pos"
+      //   category={this.state.currentQuestion.category}
+      //   onClick={this.handleSubmit}
+      // >
+      //   {this.state.currentQuestion.pos}
+      // </div>
+      // <div
+      //   value="neg"
+      //   category={this.state.currentQuestion.category}
+      //   onClick={this.handleSubmit}
+      // >
+      //   {this.state.currentQuestion.neg}
+      // </div> */}
     );
   }
 }
