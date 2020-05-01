@@ -9,6 +9,7 @@ class Quiz extends Component {
     this.state = {
       questions: [],
       currentQuestion: {},
+      completedQuestions: 0,
       results: {
         acid: 0,
         tannin: 0,
@@ -43,9 +44,10 @@ class Quiz extends Component {
   }
 
   handleSubmit(event) {
-    console.log(event.currentTarget.category);
+    const val = event.currentTarget.value;
     const newResults = { ...this.state.results };
-    newResults[this.state.currentQuestion.category] = event.target.value;
+    newResults[this.state.currentQuestion.category] =
+      (val === 'pos' ? 1 : 0) + newResults[this.state.currentQuestion.category];
     this.setState({ results: newResults });
     this.setCurrentQuestion();
   }
@@ -73,7 +75,6 @@ class Quiz extends Component {
                 color="secondary"
                 fullWidth={true}
                 value="pos"
-                category={this.state.currentQuestion.category}
                 onClick={this.handleSubmit}
               >
                 {this.state.currentQuestion.pos}
@@ -96,7 +97,13 @@ class Quiz extends Component {
                   src={process.env.PUBLIC_URL + '/raspberry.jpg'}
                 />
               </div>
-              <Button variant="contained" color="primary" fullWidth={true}>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth={true}
+                value="neg"
+                onClick={this.handleSubmit}
+              >
                 {this.state.currentQuestion.neg}
               </Button>
             </Grid>
