@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import firebase from 'firebase';
-import { StyledFirebaseAuth } from 'react-firebaseui';
-import Auth from './Auth';
+import 'firebase/firestore';
 import MyAccount from './MyAccount';
+import Quiz from './Quiz';
 
 class App extends Component {
   constructor() {
@@ -13,14 +13,6 @@ class App extends Component {
       user: {},
     };
   }
-  uiConfig = {
-    signInFlow: 'popup',
-    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-    callbacks: {
-      signInSuccessWithAuthResult: (authResult, redirectUrl) => true,
-    },
-    signInSuccessUrl: '/account',
-  };
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -28,21 +20,16 @@ class App extends Component {
     });
   }
   render() {
-    console.log('user', this.state.user);
     return (
       <Router>
         <Switch>
-          <Route path="/auth" component={Auth} />
+          {/* <Route path="/login" component={Login} /> */}
+          <Route path="/quiz" component={Quiz} />
           <Route
             path="/account"
             render={() => <MyAccount user={this.state.user} />}
           />
         </Switch>
-        <StyledFirebaseAuth
-          uiConfig={this.uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
-        <div className="App">This is my app</div>
       </Router>
     );
   }

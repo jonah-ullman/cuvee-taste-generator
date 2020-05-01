@@ -19,6 +19,8 @@ const config = {
 
 export const fire = firebase.initializeApp(config);
 
+export const db = firebase.firestore();
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
