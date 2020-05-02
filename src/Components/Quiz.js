@@ -1,131 +1,86 @@
 import React, { Component } from 'react';
 import { db } from '..';
-import { Container, Grid, Card, CardMedia, Button } from '@material-ui/core';
+import {
+  Container,
+  Grid,
+  Card,
+  CardMedia,
+  Button,
+  Typography,
+} from '@material-ui/core';
 import firebase from 'firebase';
+import QuestionCard from './QuestionCard';
+import shuffle from 'shuffle-array';
+import { withRouter } from 'react-router-dom';
 
 class Quiz extends Component {
   constructor(props) {
     super(props);
     this.state = {
       questions: [],
-      currentQuestion: {},
-      completedQuestions: 0,
-      results: {
-        acid: 0,
-        tannin: 0,
-        body: 0,
-        oak: 0,
-        flavor: 0,
-      },
-      image: '',
+      currentQuestion: 0,
     };
-    this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  async componentDidMount() {
-    const questions = [];
-    await db
-      .collection('questions')
-      .get()
-      .then((snap) => {
-        snap.forEach((doc) => questions.push(doc.data()));
-      });
-    this.setState({ questions });
-    this.setCurrentQuestion();
+    this.currentQuestion = this.incrementCurrentQuestion.bind(this);
   }
 
-  setCurrentQuestion() {
-    const oldQs = this.state.questions;
-    const currentQuestion = oldQs.splice(
-      Math.floor(Math.random() * oldQs.length),
-      1
-    )[0];
-    this.setState({ questions: oldQs, currentQuestion });
+  async componentDidMount() {
+    let questions = [];
+    const snap = await db.collection('questions').get();
+    snap.forEach((doc) => questions.push(doc.data()));
+    questions = shuffle(questions);
+    this.setState({ questions });
+  }
+
+  incrementCurrentQuestion() {
+    const prev = this.state.currentQuestion;
+    this.setState({ currentQuestion: prev + 1 });
   }
 
   handleSubmit(event) {
     const val = event.currentTarget.value;
-    const newResults = { ...this.state.results };
-    newResults[this.state.currentQuestion.category] =
-      (val === 'pos' ? 1 : 0) + newResults[this.state.currentQuestion.category];
-    this.setState({ results: newResults });
-    this.setCurrentQuestion();
+    const currentQ = this.state.questions[this.state.currentQuestion];
+    const newResults = { ...this.props.results };
+    newResults[currentQ.category] =
+      (val === 'pos' ? 1 : 0) + newResults[currentQ.category];
+    this.props.setResults(newResults);
+    if (this.state.currentQuestion < this.state.questions.length - 1) {
+      this.incrementCurrentQuestion();
+    } else {
+      this.props.history.push('/taste-profile');
+    }
   }
 
   render() {
-    return (
-      <Grid container direction="row" justify="center" spacing={3}>
-        <Grid item>
-          <Card>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <div className="image-container">
-                <img
-                  className="question-image"
-                  alt="food"
-                  src={process.env.PUBLIC_URL + '/raspberry.jpg'}
-                />
-              </div>
-              <Button
-                variant="contained"
-                color="secondary"
-                fullWidth={true}
-                value="pos"
-                onClick={this.handleSubmit}
-              >
-                {this.state.currentQuestion.pos}
-              </Button>
-            </Grid>
-          </Card>
+    const currentQ = this.state.questions[this.state.currentQuestion];
+    return this.state.questions.length ? (
+      <Container>
+        <Typography variant="h1">Cuvee Wine Taste Generator</Typography>
+        <Grid container direction="row" justify="center" spacing={3}>
+          <QuestionCard
+            value="pos"
+            imageUrl="/raspberry.jpg"
+            handleSubmit={this.handleSubmit}
+            food={currentQ.pos}
+          />
+          <Grid item>
+            <QuestionCard
+              value="neg"
+              imageUrl="/raspberry.jpg"
+              handleSubmit={this.handleSubmit}
+              food={currentQ.neg}
+            />
+          </Grid>
         </Grid>
-        <Grid item>
-          <Card>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <div className="image-container">
-                <img
-                  className="question-image"
-                  alt="food"
-                  src={process.env.PUBLIC_URL + '/raspberry.jpg'}
-                />
-              </div>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth={true}
-                value="neg"
-                onClick={this.handleSubmit}
-              >
-                {this.state.currentQuestion.neg}
-              </Button>
-            </Grid>
-          </Card>
-        </Grid>
-      </Grid>
-      // {/* <div
-      //   value="pos"
-      //   category={this.state.currentQuestion.category}
-      //   onClick={this.handleSubmit}
-      // >
-      //   {this.state.currentQuestion.pos}
-      // </div>
-      // <div
-      //   value="neg"
-      //   category={this.state.currentQuestion.category}
-      //   onClick={this.handleSubmit}
-      // >
-      //   {this.state.currentQuestion.neg}
-      // </div> */}
+        <Typography>
+          {this.state.currentQuestion}/21 questions completed!
+        </Typography>
+      </Container>
+    ) : (
+      <div>Loading</div>
     );
   }
 }
 
-export default Quiz;
+export default withRouter(Quiz);
