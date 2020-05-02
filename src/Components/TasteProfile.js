@@ -56,7 +56,7 @@ class TasteProfile extends Component {
       <Container>
         <div>Results!</div>
         <VictoryChart polar>
-          <VictoryArea data={this.state.data} />
+          <VictoryArea data={this.state.data} animate={{ duration: 700 }} />
           <VictoryPolarAxis />
         </VictoryChart>
       </Container>
