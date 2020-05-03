@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { db } from '..';
-import {
-  Container,
-  Grid,
-  Card,
-  CardMedia,
-  Button,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import firebase from 'firebase';
 import QuestionCard from './QuestionCard';
 import shuffle from 'shuffle-array';
