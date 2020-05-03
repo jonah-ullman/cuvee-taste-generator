@@ -35,26 +35,35 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
-        <Switch>
-          {/* <Route path="/login" component={Login} /> */}
-          <Route
-            exact
-            path="/quiz"
-            render={() => (
-              <Quiz setResults={this.setResults} results={this.state.results} />
-            )}
-          />
-          <Route
-            path="/taste-profile"
-            render={() => <TasteProfile results={this.state.results} />}
-          />
-          <Route
-            path="/account"
-            render={() => <MyAccount user={this.state.user} />}
-          />
-        </Switch>
-      </Router>
+      <div>
+        <div id="header">
+          <h2 id="logo">cuvee</h2>
+          <h3 className="nav-item">About Us</h3>
+        </div>
+        <Router>
+          <Switch>
+            {/* <Route path="/login" component={Login} /> */}
+            <Route
+              exact
+              path="/quiz"
+              render={() => (
+                <Quiz
+                  setResults={this.setResults}
+                  results={this.state.results}
+                />
+              )}
+            />
+            <Route
+              path="/taste-profile"
+              render={() => <TasteProfile results={this.state.results} />}
+            />
+            <Route
+              path="/account"
+              render={() => <MyAccount user={this.state.user} />}
+            />
+          </Switch>
+        </Router>
+      </div>
     );
   }
 }

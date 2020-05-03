@@ -6,8 +6,9 @@ import {
   VictoryPolarAxis,
   VictoryGroup,
 } from 'victory';
-import { Container } from '@material-ui/core';
+import { Container, Typography, Tabs, Tab } from '@material-ui/core';
 import { db } from '..';
+import { convertResultsToSentence } from '../utils';
 
 class TasteProfile extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class TasteProfile extends Component {
       selectedWine: null,
       wines: {},
     };
+    this.tabHandler = this.tabHandler.bind(this);
   }
   formatResults(results) {
     results.fruit = results.flavor;
@@ -37,6 +39,11 @@ class TasteProfile extends Component {
       };
     });
   }
+
+  tabHandler(event, value) {
+    this.setState({ selectedWine: value });
+  }
+
   async componentDidMount() {
     const formattedData = this.formatResults(this.props.results);
     const wines = {};
@@ -45,32 +52,54 @@ class TasteProfile extends Component {
     this.setState({
       data: formattedData,
       wines: wines,
-      selectedWine: 'riesling',
     });
   }
 
   render() {
     let selectedWine = this.state.wines[this.state.selectedWine];
-    console.log('selectedWine', selectedWine);
     return this.state.data.length ? (
       <Container>
-        <div>Results!</div>
-        <VictoryChart polar theme={VictoryTheme.material}>
-          <VictoryGroup
-            colorScale={['#fa9584', 'blue', 'green']}
-            style={{
-              data: {
-                fillOpacity: 0.3,
-              },
-            }}
+        <Tabs
+          onChange={this.tabHandler}
+          id="tabs"
+          value={this.state.selectedWine}
+          indicatorColor="primary"
+        >
+          <Tab label="Riesling - Germany" value="riesling" />
+          <Tab label="Sauvignon Blanc - Sancerre" value="sancerre" />
+          <Tab label="Chardonnay - Napa Valley" value="chardonnay" />
+          <Tab label="Cabernet Sauvignon - Napa Valley" value="napa-cab" />
+          <Tab label="Malbec - Argentina" value="malbec" />
+          <Tab label="Pinot Noir - Burgundy" value="red-burgundy" />
+        </Tabs>
+        <div id="chart-container">
+          <VictoryChart
+            polar
+            theme={VictoryTheme.material}
+            id="chart"
+            height={400}
+            width={400}
           >
-            <VictoryArea data={this.state.data} animate={{ duration: 700 }} />
-            {this.state.selectedWine && (
-              <VictoryArea data={selectedWine} animate={{ duration: 700 }} />
-            )}
-          </VictoryGroup>
-          <VictoryPolarAxis />
-        </VictoryChart>
+            <VictoryGroup
+              colorScale={['gold', 'dodgerblue']}
+              style={{
+                data: {
+                  fillOpacity: 0.3,
+                },
+              }}
+              domain={{ y: [0, 1] }}
+            >
+              <VictoryArea data={this.state.data} animate={{ duration: 700 }} />
+              {this.state.selectedWine && (
+                <VictoryArea data={selectedWine} animate={{ duration: 700 }} />
+              )}
+            </VictoryGroup>
+            <VictoryPolarAxis />
+          </VictoryChart>
+        </div>
+        <Typography variant="h5" id="results-header">
+          {convertResultsToSentence(this.props.results)}
+        </Typography>
       </Container>
     ) : (
       <div>Loading</div>

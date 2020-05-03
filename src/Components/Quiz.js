@@ -15,7 +15,8 @@ class Quiz extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.currentQuestion = this.incrementCurrentQuestion.bind(this);
+    this.incrementcurrentQuestion = this.incrementCurrentQuestion.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   async componentDidMount() {
@@ -31,8 +32,16 @@ class Quiz extends Component {
     this.setState({ currentQuestion: prev + 1 });
   }
 
-  handleSubmit(event) {
-    const val = event.currentTarget.value;
+  handleKeyDown(event) {
+    console.log('yup');
+    if (event.keyCode === 37) {
+      this.handleSubmit('pos');
+    } else if (event.keyCode === 39) {
+      this.handleSubmit('neg');
+    }
+  }
+
+  handleSubmit(val) {
     const currentQ = this.state.questions[this.state.currentQuestion];
     const newResults = { ...this.props.results };
     newResults[currentQ.category] =
@@ -48,28 +57,37 @@ class Quiz extends Component {
   render() {
     const currentQ = this.state.questions[this.state.currentQuestion];
     return this.state.questions.length ? (
-      <Container>
-        <Typography variant="h1">Cuvee Wine Taste Generator</Typography>
-        <Grid container direction="row" justify="center" spacing={3}>
-          <QuestionCard
-            value="pos"
-            imageUrl={currentQ.posImage}
-            handleSubmit={this.handleSubmit}
-            food={currentQ.pos}
-          />
-          <Grid item>
+      <div tabIndex={0} onKeyDown={(event) => this.handleKeyDown(event)}>
+        <Container>
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            spacing={5}
+            id="quiz"
+          >
             <QuestionCard
-              value="neg"
-              imageUrl={currentQ.negImage}
+              value="pos"
+              imageUrl={currentQ.posImage}
               handleSubmit={this.handleSubmit}
-              food={currentQ.neg}
+              food={currentQ.pos}
             />
+            <Grid item>
+              <QuestionCard
+                value="neg"
+                imageUrl={currentQ.negImage}
+                handleSubmit={this.handleSubmit}
+                food={currentQ.neg}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Typography>
-          {this.state.currentQuestion}/21 questions completed!
-        </Typography>
-      </Container>
+          <div id="quiz-footer">
+            <Typography variant="h5">
+              {this.state.currentQuestion + 1}/21
+            </Typography>
+          </div>
+        </Container>
+      </div>
     ) : (
       <div>Loading</div>
     );

@@ -5,6 +5,8 @@ import * as serviceWorker from './serviceWorker';
 import App from './Components/App';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
 
 const config = {
   apiKey: 'AIzaSyBSKB5Vhb4YtKFnEx-_Nep7ST9rRZwfK5k',
@@ -22,9 +24,12 @@ export const fire = firebase.initializeApp(config);
 export const db = firebase.firestore();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    {' '}
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </ThemeProvider>,
   document.getElementById('root')
 );
 
