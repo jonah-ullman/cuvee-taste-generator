@@ -60,14 +60,14 @@ class Quiz extends Component {
         <Grid container direction="row" justify="center" spacing={3}>
           <QuestionCard
             value="pos"
-            imageUrl="/raspberry.jpg"
+            imageUrl={currentQ.posImage}
             handleSubmit={this.handleSubmit}
             food={currentQ.pos}
           />
           <Grid item>
             <QuestionCard
               value="neg"
-              imageUrl="/raspberry.jpg"
+              imageUrl={currentQ.negImage}
               handleSubmit={this.handleSubmit}
               food={currentQ.neg}
             />

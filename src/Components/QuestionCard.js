@@ -10,7 +10,7 @@ const QuestionCard = (props) => {
             <img
               className="question-image"
               alt="a food that corresponds to the current question"
-              src={process.env.PUBLIC_URL + props.imageUrl}
+              src={process.env.PUBLIC_URL + '/' + props.imageUrl}
             />
           </div>
           <Button

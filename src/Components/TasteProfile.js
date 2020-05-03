@@ -4,11 +4,10 @@ import {
   VictoryTheme,
   VictoryArea,
   VictoryPolarAxis,
-  VictoryLabel,
+  VictoryGroup,
 } from 'victory';
 import { Container } from '@material-ui/core';
-
-console.log(VictoryTheme);
+import { db } from '..';
 
 class TasteProfile extends Component {
   constructor(props) {
@@ -23,6 +22,8 @@ class TasteProfile extends Component {
     };
     this.state = {
       data: {},
+      selectedWine: null,
+      wines: {},
     };
   }
   formatResults(results) {
@@ -36,27 +37,38 @@ class TasteProfile extends Component {
       };
     });
   }
-  componentDidMount() {
-    // console.log('results', this.formatResults(this.props.results));
+  async componentDidMount() {
     const formattedData = this.formatResults(this.props.results);
-    console.log(formattedData, 'format');
-    this.setState({ data: formattedData });
+    const wines = {};
+    const snap = await db.collection('wines').get();
+    snap.forEach((doc) => (wines[doc.id] = doc.data()[doc.id]));
+    this.setState({
+      data: formattedData,
+      wines: wines,
+      selectedWine: 'riesling',
+    });
   }
 
-  // data = [
-  //   { element: 'acid', value: 5 },
-  //   { element: 'tannin', value: 5 },
-  //   { element: 'body', value: 3 },
-  //   { element: 'oak', value: 3 },
-  //   { element: 'flavor', value: 5 },
-  // ];
   render() {
-    console.log(this.state.data, 'state data');
+    let selectedWine = this.state.wines[this.state.selectedWine];
+    console.log('selectedWine', selectedWine);
     return this.state.data.length ? (
       <Container>
         <div>Results!</div>
-        <VictoryChart polar>
-          <VictoryArea data={this.state.data} animate={{ duration: 700 }} />
+        <VictoryChart polar theme={VictoryTheme.material}>
+          <VictoryGroup
+            colorScale={['#fa9584', 'blue', 'green']}
+            style={{
+              data: {
+                fillOpacity: 0.3,
+              },
+            }}
+          >
+            <VictoryArea data={this.state.data} animate={{ duration: 700 }} />
+            {this.state.selectedWine && (
+              <VictoryArea data={selectedWine} animate={{ duration: 700 }} />
+            )}
+          </VictoryGroup>
           <VictoryPolarAxis />
         </VictoryChart>
       </Container>
