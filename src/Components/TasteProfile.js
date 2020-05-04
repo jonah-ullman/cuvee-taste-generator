@@ -6,7 +6,8 @@ import {
   VictoryPolarAxis,
   VictoryGroup,
 } from 'victory';
-import { Container, Typography, Tabs, Tab } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
+import WineTabs from './WineTabs';
 import { db } from '..';
 import { convertResultsToSentence } from '../utils';
 
@@ -47,6 +48,17 @@ class TasteProfile extends Component {
     this.setState({ selectedWine: value });
   }
 
+  // Makes a label for Material-UI Tab component
+  tabLabel(grape, location) {
+    return (
+      <div>
+        <Typography>{grape}</Typography>
+        <hr />
+        <Typography>{location}</Typography>
+      </div>
+    );
+  }
+
   // Calls result format, fetches wines from firestore, updates state
   async componentDidMount() {
     const formattedData = this.formatResults(this.props.results);
@@ -61,43 +73,14 @@ class TasteProfile extends Component {
 
   render() {
     let selectedWine = this.state.wines[this.state.selectedWine];
-    const tabLabel = (grape, location) => {
-      return (
-        <div>
-          <Typography>{grape}</Typography>
-          <hr />
-          <Typography>{location}</Typography>
-        </div>
-      );
-    };
+
     return this.state.data.length ? (
       <Container>
-        <Tabs
-          onChange={this.tabHandler}
-          id="tabs"
-          value={this.state.selectedWine}
-          indicatorColor="primary"
-          centered
-        >
-          <Tab label={tabLabel('Riesling', 'Germany')} value="riesling" />
-          <Tab
-            label={tabLabel('Sauvignon Blanc', 'Sancerre')}
-            value="sancerre"
-          />
-          <Tab
-            label={tabLabel('Chardonnay', 'Napa Valley')}
-            value="chardonnay"
-          />
-          <Tab
-            label={tabLabel('Cabernet Sauvignon', 'Napa Valley')}
-            value="napa-cab"
-          />
-          <Tab label={tabLabel('Malbec', 'Argentina')} value="malbec" />
-          <Tab
-            label={tabLabel('Pinot Noir', 'Burgundy')}
-            value="red-burgundy"
-          />
-        </Tabs>
+        <WineTabs
+          tabHandler={this.tabHandler}
+          tabLabel={this.tabLabel}
+          selectedWine={this.state.selectedWine}
+        />
         <div id="chart-container">
           <VictoryChart
             polar
