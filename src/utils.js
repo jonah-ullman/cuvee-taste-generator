@@ -1,3 +1,4 @@
+// This (verbose) function converts quiz results into a sentence about the user's taste profile.
 export function convertResultsToSentence(results) {
   const resultTerms = {};
   switch (results.oak) {

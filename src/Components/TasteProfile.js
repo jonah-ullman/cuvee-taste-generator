@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import {
-  VictoryChart,
-  VictoryTheme,
-  VictoryArea,
-  VictoryPolarAxis,
-  VictoryGroup,
-} from 'victory';
 import { Container, Typography } from '@material-ui/core';
 import WineTabs from './WineTabs';
+import Chart from './Chart';
 import { db } from '..';
 import { convertResultsToSentence } from '../utils';
 
@@ -73,7 +67,6 @@ class TasteProfile extends Component {
 
   render() {
     let selectedWine = this.state.wines[this.state.selectedWine];
-
     return this.state.data.length ? (
       <Container>
         <WineTabs
@@ -81,31 +74,7 @@ class TasteProfile extends Component {
           tabLabel={this.tabLabel}
           selectedWine={this.state.selectedWine}
         />
-        <div id="chart-container">
-          <VictoryChart
-            polar
-            theme={VictoryTheme.material}
-            id="chart"
-            height={400}
-            width={400}
-          >
-            <VictoryGroup
-              colorScale={['gold', 'dodgerblue']}
-              style={{
-                data: {
-                  fillOpacity: 0.3,
-                },
-              }}
-              domain={{ y: [0, 1] }}
-            >
-              <VictoryArea data={this.state.data} animate={{ duration: 700 }} />
-              {this.state.selectedWine && (
-                <VictoryArea data={selectedWine} animate={{ duration: 700 }} />
-              )}
-            </VictoryGroup>
-            <VictoryPolarAxis />
-          </VictoryChart>
-        </div>
+        <Chart data={this.state.data} selectedWine={selectedWine} />
         <Typography variant="h5" id="results-header">
           {convertResultsToSentence(this.props.results)}
         </Typography>

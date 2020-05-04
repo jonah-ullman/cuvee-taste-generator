@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { pink } from '@material-ui/core/colors';
 
+// This defines the default styles for Material-UI
 export default createMuiTheme({
   palette: {
     primary: { main: '#FFC0CB' },
