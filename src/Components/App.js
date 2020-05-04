@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import firebase from 'firebase';
 import 'firebase/firestore';
 import Quiz from './Quiz';
 import TasteProfile from './TasteProfile';
@@ -21,12 +20,6 @@ class App extends Component {
     this.setResults = this.setResults.bind(this);
   }
 
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      this.setState({ user: user });
-    });
-  }
-
   setResults(results) {
     this.setState({ results: results });
   }
@@ -38,7 +31,6 @@ class App extends Component {
           <h2 id="logo">cuvee</h2>
           <h3 className="nav-item">Wine Palate Generator</h3>
         </div>
-
         <Router>
           <Switch>
             <Route

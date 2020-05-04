@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { db } from '..';
 import { Container, Grid, Typography } from '@material-ui/core';
-import firebase from 'firebase';
 import QuestionCard from './QuestionCard';
 import shuffle from 'shuffle-array';
 import { withRouter } from 'react-router-dom';
@@ -13,12 +12,11 @@ class Quiz extends Component {
       questions: [],
       currentQuestion: 0,
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
     this.incrementcurrentQuestion = this.incrementCurrentQuestion.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
-
+  // Fetches questions from firestore
   async componentDidMount() {
     let questions = [];
     const snap = await db.collection('questions').get();
@@ -26,21 +24,20 @@ class Quiz extends Component {
     questions = shuffle(questions);
     this.setState({ questions });
   }
-
+  // Moves the quiz to the next question
   incrementCurrentQuestion() {
     const prev = this.state.currentQuestion;
     this.setState({ currentQuestion: prev + 1 });
   }
-
+  // Enables use of arrow keys for quiz
   handleKeyDown(event) {
-    console.log('yup');
     if (event.keyCode === 37) {
       this.handleSubmit('pos');
     } else if (event.keyCode === 39) {
       this.handleSubmit('neg');
     }
   }
-
+  // Updates results object, increments question, redirects to results
   handleSubmit(val) {
     const currentQ = this.state.questions[this.state.currentQuestion];
     const newResults = { ...this.props.results };
@@ -89,7 +86,7 @@ class Quiz extends Component {
         </Container>
       </div>
     ) : (
-      <div>Loading</div>
+      <div>Loading...</div>
     );
   }
 }

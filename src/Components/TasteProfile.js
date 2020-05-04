@@ -28,6 +28,8 @@ class TasteProfile extends Component {
     };
     this.tabHandler = this.tabHandler.bind(this);
   }
+
+  // Mutates results object to a structure that Victory chart can use
   formatResults(results) {
     results.fruit = results.flavor;
     results.earth = 5 - results.flavor;
@@ -40,10 +42,12 @@ class TasteProfile extends Component {
     });
   }
 
+  // Updates state so the selected tab's wine is rendered on the chart
   tabHandler(event, value) {
     this.setState({ selectedWine: value });
   }
 
+  // Calls result format, fetches wines from firestore, updates state
   async componentDidMount() {
     const formattedData = this.formatResults(this.props.results);
     const wines = {};

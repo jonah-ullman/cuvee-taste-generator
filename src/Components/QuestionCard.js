@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Grid,
   Card,
-  Button,
   CardActionArea,
   Typography,
   Zoom,
@@ -30,14 +29,6 @@ const QuestionCard = (props) => {
               <Typography className="card-title" variant="h4">
                 {props.food}
               </Typography>
-              {/* <Button
-            variant="contained"
-            fullWidth={true}
-            value={props.value}
-            onClick={props.handleSubmit}
-           >
-           {props.food}
-          </Button> */}
             </Grid>
           </CardActionArea>
         </Card>
