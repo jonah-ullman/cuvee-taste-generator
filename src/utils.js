@@ -73,5 +73,5 @@ export function convertResultsToSentence(results) {
     default:
   }
   resultTerms.flavor = results.fruit > results.earth ? 'fruit' : 'earth';
-  return `You might like ${resultTerms.flavor}-driven, ${resultTerms.body}-bodied wines with ${resultTerms.acid} acid, ${resultTerms.tannin} tannin, and ${resultTerms.oak} oak influence!`;
+  return `You like ${resultTerms.flavor}-driven, ${resultTerms.body}-bodied wines with ${resultTerms.acid} acid, ${resultTerms.tannin} tannin, and ${resultTerms.oak} oak influence!`;
 }

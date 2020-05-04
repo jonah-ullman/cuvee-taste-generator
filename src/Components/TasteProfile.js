@@ -57,6 +57,15 @@ class TasteProfile extends Component {
 
   render() {
     let selectedWine = this.state.wines[this.state.selectedWine];
+    const tabLabel = (grape, location) => {
+      return (
+        <div>
+          <Typography>{grape}</Typography>
+          <hr />
+          <Typography>{location}</Typography>
+        </div>
+      );
+    };
     return this.state.data.length ? (
       <Container>
         <Tabs
@@ -64,13 +73,26 @@ class TasteProfile extends Component {
           id="tabs"
           value={this.state.selectedWine}
           indicatorColor="primary"
+          centered
         >
-          <Tab label="Riesling - Germany" value="riesling" />
-          <Tab label="Sauvignon Blanc - Sancerre" value="sancerre" />
-          <Tab label="Chardonnay - Napa Valley" value="chardonnay" />
-          <Tab label="Cabernet Sauvignon - Napa Valley" value="napa-cab" />
-          <Tab label="Malbec - Argentina" value="malbec" />
-          <Tab label="Pinot Noir - Burgundy" value="red-burgundy" />
+          <Tab label={tabLabel('Riesling', 'Germany')} value="riesling" />
+          <Tab
+            label={tabLabel('Sauvignon Blanc', 'Sancerre')}
+            value="sancerre"
+          />
+          <Tab
+            label={tabLabel('Chardonnay', 'Napa Valley')}
+            value="chardonnay"
+          />
+          <Tab
+            label={tabLabel('Cabernet Sauvignon', 'Napa Valley')}
+            value="napa-cab"
+          />
+          <Tab label={tabLabel('Malbec', 'Argentina')} value="malbec" />
+          <Tab
+            label={tabLabel('Pinot Noir', 'Burgundy')}
+            value="red-burgundy"
+          />
         </Tabs>
         <div id="chart-container">
           <VictoryChart

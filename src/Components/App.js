@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import firebase from 'firebase';
 import 'firebase/firestore';
-import MyAccount from './MyAccount';
 import Quiz from './Quiz';
 import TasteProfile from './TasteProfile';
+import Home from './Home';
 
 class App extends Component {
   constructor() {
@@ -17,8 +17,6 @@ class App extends Component {
         oak: 0,
         flavor: 0,
       },
-      isLoggedIn: false,
-      user: {},
     };
     this.setResults = this.setResults.bind(this);
   }
@@ -38,11 +36,11 @@ class App extends Component {
       <div>
         <div id="header">
           <h2 id="logo">cuvee</h2>
-          <h3 className="nav-item">About Us</h3>
+          <h3 className="nav-item">Wine Palate Generator</h3>
         </div>
+
         <Router>
           <Switch>
-            {/* <Route path="/login" component={Login} /> */}
             <Route
               exact
               path="/quiz"
@@ -57,10 +55,7 @@ class App extends Component {
               path="/taste-profile"
               render={() => <TasteProfile results={this.state.results} />}
             />
-            <Route
-              path="/account"
-              render={() => <MyAccount user={this.state.user} />}
-            />
+            <Route path="/" component={Home} />
           </Switch>
         </Router>
       </div>
